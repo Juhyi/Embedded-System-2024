@@ -111,4 +111,4 @@
     node2->data = 20;
     node1->next = node2;
     ```
-    ![list](https://www.google.com/url?sa=i&url=https%3A%2F%2Fdean30.tistory.com%2F33&psig=AOvVaw2fhtNdBLukdMKWl4_Yi4ZD&ust=1710581621779000&source=images&cd=vfe&opi=89978449&ved=0CBMQjRxqFwoTCOj8maf79YQDFQAAAAAdAAAAABAD)
+    ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_image.png)
