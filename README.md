@@ -88,6 +88,7 @@
     }node;
     ```
     - 노드 생성 : 동적메모리 할당을 통해 노드를 생성, malloc()함수를 이용하여 노드 크기만큼 동적 메모리를 할당받아 헤드 포인터에 저장
+	 ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_image.png)
     ```노드 생성
     node* newnode = (node*)malloc(sizeof(node)); // 헤드 포인터에 동적 메모리 주소 저장
     ```
@@ -111,4 +112,4 @@
     node2->data = 20;
     node1->next = node2;
     ```
-    ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_image.png)
+    ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_1.png)
