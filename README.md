@@ -78,6 +78,7 @@
 ## 3일차
 - 연결리스트 : 하나의 노드가 값과 다음 노드를 가리키는 노드로 이루어진 자료구조
     - head 포인터 : 연결리스트에서 첫 번째 노드의 주소를 가지는 포인터
+	  ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_1.png)
     - 노드 : 연결 리스트의 아이템
         - 데이터 필드 : 연결 리스트의 각 노드에 저장된 데이터
         - 링크 필드 : 다른 노드의 주소를 저장하는 부분
@@ -88,7 +89,6 @@
     }node;
     ```
     - 노드 생성 : 동적메모리 할당을 통해 노드를 생성, malloc()함수를 이용하여 노드 크기만큼 동적 메모리를 할당받아 헤드 포인터에 저장
-	 ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_image.png)
     ```노드 생성
     node* newnode = (node*)malloc(sizeof(node)); // 헤드 포인터에 동적 메모리 주소 저장
     ```
@@ -112,4 +112,5 @@
     node2->data = 20;
     node1->next = node2;
     ```
-    ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_1.png)
+	 ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_image.png)
+
