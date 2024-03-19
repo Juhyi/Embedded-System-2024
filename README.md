@@ -79,25 +79,31 @@
 - 연결리스트 : 하나의 노드가 값과 다음 노드를 가리키는 노드로 이루어진 자료구조
     - head 포인터 : 연결리스트에서 첫 번째 노드의 주소를 가지는 포인터
 	  ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_1.png)
+	  ```C
+	   typedef struct NODE{
+        int data;            // 노드의 데이터를 담고 있는 데이터 필드
+        struct NODE* next;  // 자기자신을 가리키는 링크 필드
+    	}node;
+	  void main()
+	  {
+		node* head = (node*) malloc(sizeof(node));  // head 노드 동적할당
+		head->next = NULL;  // head는 데이터를 가질 필요X, 첫번째 노드를 가리킴.
+	  }
+	  ```
     - 노드 : 연결 리스트의 아이템
         - 데이터 필드 : 연결 리스트의 각 노드에 저장된 데이터
         - 링크 필드 : 다른 노드의 주소를 저장하는 부분
-    ``` 노드 구조
-    typedef struct NODE{
-        int data;            // 노드의 데이터를 담고 있는 데이터 필드
-        struct NODE* nexct;  // 자기자신을 가리키는 링크 필드
-    }node;
-    ```
     - 노드 생성 : 동적메모리 할당을 통해 노드를 생성, malloc()함수를 이용하여 노드 크기만큼 동적 메모리를 할당받아 헤드 포인터에 저장
-    ```노드 생성
-    node* newnode = (node*)malloc(sizeof(node)); // 헤드 포인터에 동적 메모리 주소 저장
+    ```C
+    node* newnode = (node*)malloc(sizeof(node)); // newnode 동적할당, 생성
     ```
     - 노드의 필드에 값 저장
-    '''노드 필드 값 저장
+    ```C
     newnode->data = 1;
-    newnode->next = LULL;  // 마지막 노드의 링크 필드는 NULL을 가짐.
+    newnode->next = NULL;  // 마지막 노드의 링크 필드는 NULL을 가짐.
     ```
     -노드 생성과 연결
+	![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_image.png)
     ```C
     node * head = (node*)malloc(sizeof(node)); // 헤드(시작)노드 생성
     node1->next = head->next;
@@ -112,5 +118,13 @@
     node2->data = 20;
     node1->next = node2;
     ```
-	 ![list](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/linked_list_image.png)
-
+	- while문을 이용한 노드 출력
+	```C
+	node* curr  = head ->next;	// curr이 첫번째 노드를 가리키게 함.
+	while(curr != NULL)			// 횟수가 정해져 있지 않은 상황 ->while문 이용
+	{
+		printf("%d\n", curr->data);
+		curr = curr->next;		// node2(주소값이 들어감) 가리키게 함.
+	} 
+	// curr의 next를 curr에 집어 넣으므로 curr이 NULL일때 마지막 노드.
+	```
