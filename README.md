@@ -342,3 +342,4 @@
 			// 현재 top에 있는 데이터를 추출하고 난 후 top 1 감소
 		}
 		```
+		dkjf;alkdjf;adfj
