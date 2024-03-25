@@ -1,5 +1,4 @@
 # Embedded-System-2024
-# embedded-system-2024
 부경대 2024 IoT 개발자과정 임베디드시스템 학습 리포지토리
 
 ## 1일차
@@ -52,14 +51,14 @@
 	- <초록색은 실행파일>
 	- gcc : 컴파일
 		-> 형식 : gcc -o 만들실행파일명 소스파일명
-		-> ex) gcc -o test01 test01.c => 소스파일 test01.c의 실행파일을 test01 이라는 이름으로 생성
+		-> (ex) gcc -o test01 test01.c => 소스파일 test01.c의 실행파일을 test01 이라는 이름으로 생성
 		- gcc test01.c => a.out 이라는 기본적인 실행파일 생성(출력(./a.out)은 동일하게 됨)
 	- ./ : 출력
 	
 	- mv : 파일이동, 수정
-		-> ex) mv test01.c test02.c => test01.c를 test02.c로 수정(변경)
+		-> (ex) mv test01.c test02.c => test01.c를 test02.c로 수정(변경)
 	- cp : 파일 복사
-		-> ex) cp test03.c test.c => test.c를 복사하여 test03.c를 생성
+		-> (ex) cp test03.c test.c => test.c를 복사하여 test03.c를 생성
 		
 - 입력과 출력 
 // 파일: printf01.c/ printf02.c/ prinf03.c/ func01.c/ func02.c / tri01.c
@@ -148,7 +147,8 @@
 		newnode->data = data;
 		newnode->next = pnode->next;	// 새로운 노드가 현재 노드의 다음을 가리키게 함.
 		pnode->next = newnode;			// 노드가 새로 생성될때 마다 첫번째 노드로 삽입, (현재 노드가 새로운 노드를 가리키게 함.)
-	 }    
+	 }   
+	 ``` 
 		- 후위 삽입 : 새로 만든 노드를 연결리스트 맨 마지막에 삽입
 	 ```C
 	 void rear_addNode(node* pnode, int _data)
@@ -214,19 +214,131 @@
 	- 삽입 함수 정의
 		- 전위 삽입 
 		1. 삽입할 노드를 생성 
-		: node* 타입의 newnode 동적할당해주기
+		: node* 타입의 newnode 동적할당해주기- 프로그램 실행 중에 메모리 공간을 할당을 해주는 것! (힙 영역에)
+		<정적할당 - 프로그램 실행전에 미리 메모리공간을 할당>
 		```C
 		void preAddNode(headNode* pnode, int data)
 		{
-			node* newnode = (node*)malloc(sizeof(node));
-			newnode->data = data;
+			node* newnode = (node*)malloc(sizeof(node)); //힙영역 메모리 공간에 node사이즈만큼 할당 받고, 할당받은 주소값을 newnode node포인터변수에 저장.	
+			newnode->data = data; 					// 입력받은 데이터 값을 새 node의 데이터 필드에 저장.
+			newnode->next = pnode->head; 			// headnode 포인터 변수가 head필드를 참조한 값을 새노드의 next필드에 대입. 
+			pnode->head = newnode;					// 새노드를 pnode의 헤드필드에 집어넣는다. == pnode의 헤드필드가 새노드를 가리킨다.
 		}
 		```
-		2. 삽입할 노드의 링크가 삽입될 위치의 후행 노드를 가리키게 한다.
-		3. 삽입될 위치의 선행노드의 링크가 삽입할 노드를 가리키게 한다.
-		: 전위 삽입이므로 newnode의 링크가 head를 가리키게 해주기
+		
+		- 후위 삽입
+		1. 삽입할 노드를 생성
+		2. 마지막 노드 뒤에 새로 만든 노드를 삽입하기 위해=> 연결리스트의 마지막 노드의 next가 NULL이 될때까지 현재 노드가 다음 노드를 가리키는 것을 순회함.
+		3. 마지막 노드 뒤에 새로 만든 노드를 삽입
+		```c
+		void rear_addNode(headNode* pnode, int _data)
+		{
+			node* newnode = (node*)malloc(sizeof(node));  // 힙영역 메모리 공간에 node사이즈만큼 할당받고 할당받은 주소값을 newnode 노드포인터 변수에 저장.
+			newnode-> data = _data;		// 입력받은 data값을 새노드의 데이터필드에 저장
+			newnode->next = NULL;		// 후위 삽입이므로 새 노드는 마지막 노드가 됨.  마지막 노드의 링크필드는 NULL을 가리킴
+
+			node* curr = pnode-> head;	// headNode 포인터변수가 head필드를 참조한 값을 node포인터변수 curr에 저장한다.
+
+			while( curr->next != NULL)  // curr의 next필드가 NULL이 되면 순회를 멈춤. 
+			{
+				curr = curr->next;      // 노드포인터변수 curr이 next필드를 참조한 값을 curr에 집어넣는다. 반복문을 순회하고나면 curr이 마지막 노드, next필드는 NULL을 가짐
+			}	
+			curr->next = newnode;		// 새노드를 curr 노드 포인터변수 next필드에 집어 넣는다. == curr의 next필드가 새노드를 가리킨다.
+		}		
+		```
+		- 전위삽입이 이루어지지 않은 상태에서 후위삽입 바로 실행할 수 있는 후위삽입 함수
+		: pnode의 head가 NULL인 경우의 상황을 if문으로 구현 => 연결리스트가 비어있는 경우 새 노드를 헤드 노드로 설정.
 		```C
-			newnode->next = pnode->head;	 
-			pnode->head = newnode;
-		```	
+		void proAddNode(headNode* pnode, int data)
+		{
+			node* newnode = (node*)malloc(sizeof(node));  // 힙영역 메모리 공간에 node 사이즈만큼의 동적할당을 받은 후 node 포인터 변수 타입의 newnode에 저장
+			if(newnode != NULL){		// 동적할당을 제대로 받았다면 밑의 코드를 실행, 프로그램의 안정성을 높이고 메모리 오류를 방지하기 위해 검사하는 것
+				newnode->data = data;	// 입력받은 data값을 새노드의 데이터 필드에 저장
+				newnode->next = NULL;	//  새노드의 링크필드는 NULL을 가짐.
+				if(pnode->head == NULL)		pnode->head = newnode;		// headnode 포인터변수의 head필드 값이 NULL 즉, 연결리스트가 비어있다면 새노드를 headnode 포인터변수의 head필드에 집어넣는다 == pnode의 head필드가 새노드를 가리킴.
+				else	// 비어있지 않다면, 위에 코드와 동일
+				{
+					node* curr = pnode->head;
+					while(curr->next != NULL)
+					{
+						curr = curr->next;
+					}
+						curr->next = newnode;
+				}
+			}
+		}
+
+	- 삭제 함수 정의 : 삭제할 노드 찾기 -> 이전 노드의 링크 수정 -> 메모리 해제
+	```c
+	void allFreeNode(headnode *pnode){
+		node* curr = pnode->head;   // headNode 포인터변수가 head 필드를 참조한 값을 node포인터변수 curr에 저장
+		while(curr != NULL)			// curr이 NULL이 되면 순회를 멈춤 
+		{
+			printf("%d 노드 삭제\n", curr->data);
+			node* temp = curr;		// head 필드 참조값을 가지는 변수 curr 값을 node포인터변수 temp에 저장
+			curr = curr ->next;		// curr 노드 포인터변수 next필드를 참조한 값을 curr에 저장
+			free(temp)				// 동적할당 해제				
+		}
+		printf("헤드 삭제");
+		free(pnode);				// 헤드노드 동적할당 해제
+	}
+	```
+## 5일차
+- 스택(Stack) : "쌓다"의 의미로 데이터를 차곡차곡 쌓아올린 형태의 자료구조
+	- LIFO(Last In First Out) : 후입선출, 가장 마지막에 삽입된 자료가 가장 먼저 삭제되는 구조
+	- Top으로 정한 곳을 통해서만 접근할 수 있으면 top을 통해 자료가 쌓이고 삭재된다.
+	- 연산 : 삽입연산(push), 삭제연산(pop)
+	- 사용사례 : 웹 브라우저 방문기록(뒤로가기), 실행취소(undo), 역순 문자열 만들기, 후위 표기법 계산
+	![stack](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/stack.png)	
 	
+	- 배열로 stack 구현
+		- 배열, 배열의 크기, TOP 위치 정의
+		```C
+		#define STACK_SZ 10
+		#define TRUE 1
+		#define FLASE 0
+
+		int stack[STACK_SZ];
+		int top = -1;
+		```
+		- 스택이 가득 찼는지 확인하는 함수 정의
+		```C
+		int isFull(void)
+		{
+			if(top == STACK_SZ - 1) return TRUE;	// 가득차면 1 반환 
+			else	return FALSE;					// 아니면 0 반환
+		}
+		```
+		- 스택이 비었는지 확인하는 함수 정의
+		```C
+		int isEmpty(void)
+		{
+			if(top <= -1)	return TRUE;	// 사용환경에서 일시적 오류가 발생할 수 있으므로 == 말고 <=을 사용
+		  	else	return FALSE;
+		}
+		```
+		- 삽입연산 함수 정의 : 스택은 차곡차곡 자료가 쌓이는 형태 
+		```C
+		void push(int data)
+		{
+			if(isFull()){
+				printf("stack overflow\n");
+				return;
+			}
+			stack[++top] = data; 	// 오버플로때문에 ++전위로 사용 
+			// 데이터를 추가하기 전에 top을 증가시키고 증가된 top에 데이터를 할당.
+		}
+		```
+		- 삭제연산 함수 정의 : LIFO, 마지막에 넣은 데이터가 삭제.
+		```C
+		int pop(void)
+		{
+			if(isEmpty())
+			{
+				printf("stack underflow\n");
+				return -1;
+			}
+			return stack[top--]; // 스택에서 데이터를 제거하고 반환
+			// 현재 top에 있는 데이터를 추출하고 난 후 top 1 감소
+		}
+		```
