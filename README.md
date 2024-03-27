@@ -285,13 +285,15 @@
 	```
 ## 5일차
 - 스택(Stack) : "쌓다"의 의미로 데이터를 차곡차곡 쌓아올린 형태의 자료구조
+	![stack](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/stack.png)
+
 	- LIFO(Last In First Out) : 후입선출, 가장 마지막에 삽입된 자료가 가장 먼저 삭제되는 구조
 	- Top으로 정한 곳을 통해서만 접근할 수 있으면 top을 통해 자료가 쌓이고 삭재된다.
 	- 연산 : 삽입연산(push), 삭제연산(pop)
 	- 사용사례 : 웹 브라우저 방문기록(뒤로가기), 실행취소(undo), 역순 문자열 만들기, 후위 표기법 계산
-	![stack](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/stack.png)	
+		
 	
-	- 배열로 stack 구현
+	- 배열로 stack 구현하기
 		- 배열, 배열의 크기, TOP 위치 정의
 		```C
 		#define STACK_SZ 10
@@ -342,4 +344,90 @@
 			// 현재 top에 있는 데이터를 추출하고 난 후 top 1 감소
 		}
 		```
-		dkjf;alkdjf;adfj
+	- 연결리스트로 stack 구현하기
+		- 구조체 stack 선언 
+		```C
+		#define STACK_SZ 10
+		typedef struct STACK{
+			int buf[STACK_SZ];	// satck의 요소를 저장하는 배열
+			int top;			// stackd의 맨 위에 있는 요소를 가리키는 인덱스
+		}stack;
+
+		- 삽입연산 함수 정의
+		```C 
+		void push(stack* st, int value)		// 출력은 없고 입력으로 매개변수 stack포인터 변수 타입의 st와 int타입의 value를 가짐.
+			{
+			if(st->top == STACK_SZ -1){	// 배열의 마지막 인덱스의 값과 st 포인터변수 top 필드를 참조할 값이 같으면
+				printf("stack overflow\n");	// stack이 가득차서 더 값을 넣을 수 없다.
+				return;	
+			}
+			st->top++;	// st의 top 필드를 참조한 값을 +1 해줌
+			st->buf[st->top] = value;	// 입력받은 값을  st포인터 변수의 buf 필드를 참조한 값에 저장. (buf의 인덱스는 st포인터 변수가 top필드를 참조한 값)
+			
+			// 위의 두줄을 한줄로 표현하면 => st->buf[++(st->top)] = value;  
+			printf("%d\n", value);
+		}
+		
+		- 삭제연산 함수 정의
+		```C
+		int pop(stack* st, int value)	// 실제로 삭제하는 것이 아니라 배열의 출력에서 나타나지 않게 해주는 함수 구현
+		{
+			if(stack->top == -1)
+			{
+				printf("stack underflow\n");
+				return;
+			}
+
+			int delete = st->buf[st->top];	// int형 변수에 stack의 최상위 요소의 값을 저장. 
+			st->top--;	// top 값을 -1 해줌
+			return delete;	// 삭제할 요소의 값을 반환.
+			//return st->buf[(st->top)--];  
+
+		}
+
+- 큐(Queue) : 한쪽 끝에서만 삽입이 이루어지고, 다른 한쪽 끝에서는 삭제 연산이 이루어지는 자료구조.
+	![queue](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/queue.png)
+	
+	- FIFO(First In First Out) : 먼저 들어간 것이 먼저 나가는 형식
+	- 전단(front) : 데이터 삭제연산 (가장 먼저 들어왔던 데이터가 쌓이는쪽) -> dequeue () 연산
+	- 후단(rear) : 데이터의 삽입 연산 (가장 나중에, 최근에 삽입된 데이터가 쌓여있는 쪽) -> enqueue() 연산
+	- 예시 : 한줄로 나가야하는 차들, 컴퓨터 운영체제의 테스크 스케쥴링
+
+
+	- 배열로 queue 구현하기 : 실제로 삭제하지는 않고 FIFO 로 입력되고 출력되는 것을 보이는 것을 구현하였음.
+		- 연산기능 함수 구현전 전역변수 선언
+		```C
+		int queue[10];
+		int rear = 0;
+		int front = 0;
+		```
+		- 삽입연산 함수 정의
+		```C
+		void enqueue(int data)	// 입력으로 배열의 요소값 넣음
+		{
+			if(rear >= Q_SIZE -1)	// 배열이 가득 차 있으면
+			{
+				printf("queue overflow\n");	 // queue가 가득 찼다는 문자열 출력
+				return;	 // 함수를 즉시 종료. 함수를 호출하는 곳으로 제어를 반환	
+			}
+
+			queue[++rear] = data;  // rear이 -1으로 초기화되어 있으므로 data 값을 삽입하기 전에 증가를 시켜준 후 요소값 저장. 
+		}
+		```
+		- 삭제연산 함수 정의
+		```C
+		int dequeue()
+		{
+			if(front == rear)  // 입력이 없었다면 front와 rear값 변화 X
+			{
+				printf("queue underflow\n");	
+				return -1;	// 함수 즉시 종료, 함수를 호출하는 곳에서 -1 반환
+			}
+			
+			return queue[++front]; 	// front가 -1이므로 인덱스를 1증가시켜 준 후 배열의 요소 값 반환 
+		}
+
+## 6일차
+- QUEUE 구현 계속
+	- 순차 자료구조를 이용한 큐 자료구조
+
