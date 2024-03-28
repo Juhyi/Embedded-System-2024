@@ -397,7 +397,7 @@
 	- 배열로 queue 구현하기 : 실제로 삭제하지는 않고 FIFO 로 입력되고 출력되는 것을 보이는 것을 구현하였음.
 		- 연산기능 함수 구현전 전역변수 선언
 		```C
-		int queue[10];
+		int queue[10];	
 		int rear = 0;
 		int front = 0;
 		```
@@ -429,5 +429,146 @@
 
 ## 6일차
 - QUEUE 구현 계속
-	- 순차 자료구조를 이용한 큐 자료구조
+	- 순차 자료구조를 이용한 큐 자료구조                                      : 동적할당을 받아 순차 자료구조를 표현하고 있지만 메모리 해제를 하지 않고 구현하였음. 배열의 인덱스를 사용하여 큐 자료 구조를 나타냄 
+		- 구조체 선언
+		```C
+		typedef struct{
+			int front;	// 삭제연산을 하는 front 필드 
+			int rear;	// 삽입연산을 하는 rear 필드
+			char queue[Q_SIZE]; // queue 배열
+		}queue;
+		```
+		- malloc() 함수를 이용하여 동적할당 해주기
+		```C
+		queue* create()
+		{
+			queue* q = malloc(sizeof(queue)); // 힙영역 메모리 공간에 queue 사이즈만큼의 동적할당을 받은 후 queue 포인터 변수 타입의 q에 저장
+			if(q == NULL) exit(!);	// q가 비어있으면 프로그램 종료
+			q->front = -1;	// q의 front 필드의 값 -1로 초기화
+			q->rear =-1;	// q의 rear 필드이 값 -1로 초기화
+			return q;       // 생성한 queue 포인터 변수 타입의 q를 반환함.
+		}
+		```
+		- 삽입연산 함수 정의하기
+		```C
+		void enqueue(queue* qNew, char a) //매개변수로 queue 포인터 변수 타입,char 타입을 가짐
+		{
+			if(qNew->rear >= Q_SIZE -1){ // 새노드의 rear 필드를 참조한 값이 배열의 마지막 인덱스 보다 크다면
+				printf(" QUEUE Overflow!\n");	// queue 배열이 가득찼다는 문자열 출력
+					return;
+			}
+			qNew->queue[++(qNew->rear)] = a; // 새노드의 배열 queue 필드의 인덱스를 초기화 시킨 rear필드의 값에서 1 증가시킨 후 그 인덱스에 배열의 요소 저장
+			printf("ENQUEUE: %c", qNew->queue[qnew->raer]); // queue 배열은 queue 구조체의 필드의 값이므로 qNew -> queue[] 로 참조해야 배열의 요소 값에 접근 가능.
+		}
+		```
+
+		- 삭제연산 함수 정의하기
+		```C
+		char dequeue(queue* qNew, char a)	
+		{
+			if(q->front == q->real)		// q 포인터 변수가 front필드를 참조한 값과 real을 참조한 값이 동일하다면
+			{	
+				printf("QUEUEU Underflow\n");	// queue 가 비었다는 문자열 출력
+				return -1;
+			}
+			else{	
+				char dequeueQ = q->queue[++(q->front)];	// 포인터 변수 q가 배열 queue를 참조하는데 인덱스는 q가 front필드를 참조한 값 +1인 요소값을 dequeueQ에 저장 
+				printf("DEQUEUE: %s\n", deqqueueQ);		// dequeue 출력
+				return dequeue;
+			}
+		}
+		```
+		- 출력함수 정의하기
+		```C
+		void printQ(queue* pq)
+		{
+			if(pq->front == pq->rear) // queue 포인터 변수가 front 필드를 참조한 값과 rear을 참조한 값이 같을 때 == enqueue 함수 호출과 dequeue 함수 호출 수가 같을때
+			{
+				printf("QUEUE Emtry!\n");	// queue 가 비었다는 문자열 출력
+			}
+			else  // 빈칸 출력을 피하기 위해 else 사용
+			{
+				printf("QUEUE: ");	
+				int i = pq->front;	// pd 포인터 변수가 front 필드를 참조한 값을 정수형 변수 i에 저장
+				while(i <= (pq->rear)) //i가 pd포인터 변수가 rear을 참조한 값보다 작거나 같을때까지
+				{
+					printf("%c ",pq->queue[++i]);	// 인덱스를 1씩 증가시키고 그 value를 출력함.
+					// 만약 enqueue가 2번 호출되고 dequeue는 호출이 한번도 되지 않았다면 => i =-1부터 0 될때까지 2번 반복하고 queue[0]과 queue[1]이 출력됨.
+				}
+				printf("\n");
+			}
+		}
+		```
+	- 연결리스트를 이용한 큐 구현하기
+		- 구조체 선언하기
+		```C
+		// 연결리스트 사용을 위한 노드 구조체 선언
+		typedef struct NODE{  
+			int data;		  // 큐의 각 요소의 값이 돠는 data필드	
+			struct NODE* link; // 다음노드를 가리킬 link 필드
+		}node;	
+		// 큐 구조체 선언
+		typedef struct{		
+			node* rear;		// 삽입연산을 하는 부분을 node 포인터 변수 타입 rear 선언 
+			node* front;	// 삭제연산을 하는 부분을 node 포인터변수 타입 front 선언
+		}linkQ;
+		```
+		- 큐 생성함수 구현하기
+		```C
+		linkQ createLinkQ()
+		{
+			linkQ* linkedQ = (linkQ*)malloc(sizeof(linkQ));	////힙영역 메모리 공간에  linkQ사이즈만큼 할당 받고, 할당받은 주소값을 linkedQ linkQ포인터변수에 저장.	
+			linkedQ->rear = NULL;	// 새노드의 rear 필드 값을 NULL로 초기화
+			linkedQ->front = NULL; 	// 새노드이 fronbt 필드 값을 NULL로 초기화
+			printf("linkQ* 타입의 노드 생성 완료");
+			return linkedQ;
+		} 
+		```
+		- 삽입연산 함수 구현하기
+		```C
+		void enQueue(linkQ* newQ, int _data)
+		{
+			node* newnode = (node*)malloc(sizeof(node));
+			newnode->data = _data;
+			newnode->link = NULL;
+
+			if(linkedQ->rear == NULL)
+			{
+				newQ->rear = newnode;
+				newQ->front = newnode;
+			}
+			else{
+				newQ->rear->link = newnode;
+			}
+		}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

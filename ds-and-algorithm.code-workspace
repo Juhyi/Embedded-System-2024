@@ -1,0 +1,11 @@
+{
+	"folders": [
+		{
+			"path": "../ds-and-algorithm"
+		}
+	],
+	"settings": {
+		"terminal.integrated.fontSize": 16,
+		"code-runner.runInTerminal": true
+	}
+}
