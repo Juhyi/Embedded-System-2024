@@ -539,7 +539,40 @@
 			}
 			else{
 				newQ->rear->link = newnode;
+				newQ->rear = newnode;
 			}
+		}
+		```
+		- 삭제연산 함수 구현하기
+		```C
+		int deqQueue(linkQ* deletQ)
+		{
+			if(deldeQ->front == NULL){
+				printf("Queue is Empty, Dequeue Fail\n")
+			}
+			else{
+				node* temp = deletQ->front;
+				int data = temp->data;
+				
+				deletQ->front = temp ->link;
+				printf("Dequeue %d 추출\n", data);
+				free(temp);
+				return data;
+			}
+		}
+		```
+		- 출력함수 구현하기
+		```C
+		void printQ(linkQ* pq)
+		{
+			if(pq->front== NULL && pq->rear == NULL)
+			{
+				printf("Queue is Em)
+			}
+
+
+
+
 		}
 
 
