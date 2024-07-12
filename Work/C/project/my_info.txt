@@ -1,0 +1,5 @@
+*Login impormation
+ID:juhyi12	PASSWORD:abc
+
+*Human impormtion
+이름: 이주희 생년월일: 991217 전화번호: 01042352449
