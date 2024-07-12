@@ -285,7 +285,9 @@
 	```
 ## 5일차
 - 스택(Stack) : "쌓다"의 의미로 데이터를 차곡차곡 쌓아올린 형태의 자료구조
-	![stack](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/stack.png)
+
+
+![stack](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/stack.png)
 
 	- LIFO(Last In First Out) : 후입선출, 가장 마지막에 삽입된 자료가 가장 먼저 삭제되는 구조
 	- Top으로 정한 곳을 통해서만 접근할 수 있으면 top을 통해 자료가 쌓이고 삭재된다.
@@ -386,6 +388,7 @@
 		}
 
 - 큐(Queue) : 한쪽 끝에서만 삽입이 이루어지고, 다른 한쪽 끝에서는 삭제 연산이 이루어지는 자료구조.
+  
 	![queue](https://raw.githubusercontent.com/Juhyi/Embedded-System-2024/main/images/queue.png)
 	
 	- FIFO(First In First Out) : 먼저 들어간 것이 먼저 나가는 형식
